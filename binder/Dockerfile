@@ -1,169 +1,42 @@
-# syntax=docker/dockerfile:1.7-labs
-# ^ parser directive, must stay the very first line: the COPY --exclude below is
-#   a labs feature and only BuildKit reads it.
-# Dockerfile of the base image: https://github.com/IntEL4CoRo/jupyter-ros2
-FROM intel4coro/jupyter-ros2:jazzy-py3.12
+FROM intel4coro/yxzhan-2dcram-2dvrb-2dlab-eb909a@sha256:5190ba66716b6e911aeac881d5f5a4aa6afb3c5c7c1029c4e8171777381f5cd3
+USER root
+ENV ACCEPT_EULA=YES PRIVACY_CONSENT=YES OMNI_KIT_ACCEPT_EULA=YES \
+    NVIDIA_DRIVER_CAPABILITIES=all PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
+WORKDIR /workspace
 
-USER ${NB_USER}
-#============= Install IsaacSim =============#
-ENV ISAACSIM_VERSION="5.1"
-ENV ISAACSIM_PATH="/isaac-sim"
-ENV ISAACSIM_PYTHON_EXE="${ISAACSIM_PATH}/python.sh"
+# Reuse the same pinned CRAM/ROS/Isaac Sim installation as the verified demo.
+RUN mkdir -p /workspace/third_party && \
+    git clone --depth 1 --branch v2.3.2 https://github.com/isaac-sim/IsaacLab.git /workspace/third_party/IsaacLab && \
+    test "$(git -C /workspace/third_party/IsaacLab rev-parse HEAD)" = 37ddf626871758333d6ed89cf64ad702aef127d0
+COPY rl/install.sh rl/build-constraints.txt rl/runtime-constraints.txt /workspace/rl/
+RUN bash /workspace/rl/install.sh
 
-# Download IsaacSim
-RUN cd /tmp && \
-    wget https://download.isaacsim.omniverse.nvidia.com/isaac-sim-standalone-${ISAACSIM_VERSION}.0-linux-x86_64.zip && \
-    sudo unzip /tmp/isaac-sim-standalone-${ISAACSIM_VERSION}.0-linux-x86_64.zip -d ${ISAACSIM_PATH} && \
-    sudo chown ${NB_USER}:users -R ${ISAACSIM_PATH} && \
-    rm /tmp/isaac-sim-standalone-${ISAACSIM_VERSION}.0-linux-x86_64.zip
+# Make the original assets available at the workspace paths used during training.
+# Changes below belong only to this derived image, not the original Lab image.
+RUN ln -s /home/jovyan/cram-vrb-lab /workspace/cram-vrb-lab
+COPY --chown=jovyan:users cram_vrb_lab/ /home/jovyan/cram-vrb-lab/cram_vrb_lab/
+COPY --chown=jovyan:users demos/giskard_server.py demos/garmi_rl_demo.py /home/jovyan/cram-vrb-lab/demos/
+COPY --chown=jovyan:users demos/desktop/GARMI_RL.desktop /home/jovyan/Desktop/
+COPY integration/ /workspace/integration/
+COPY rl/garmi_rl/ /workspace/rl/garmi_rl/
+COPY scripts/ /workspace/scripts/
+COPY runtime/ /workspace/runtime/
+COPY binder/ /workspace/binder/
+COPY third_party/licenses/ /workspace/third_party/licenses/
+COPY README.md THIRD_PARTY_NOTICES.md /workspace/
+RUN python3 /workspace/runtime/unpack.py && \
+    /home/jovyan/cram-vrb-lab/cognitive_robot_abstract_machine/.venv/bin/python /workspace/integration/prepare_full_scene.py && \
+    rm -f /home/jovyan/.config/autostart/GARMI-Apartment-autostart.desktop && \
+    mkdir -p /home/jovyan/.config/autostart && \
+    cp /workspace/binder/GARMI-RL-autostart.desktop /home/jovyan/.config/autostart/ && \
+    chown jovyan:users /home/jovyan/.config/autostart/GARMI-RL-autostart.desktop && \
+    mkdir -p /workspace/results/cram-rl-web && \
+    chown -R jovyan:users /workspace && \
+    chmod +x /workspace/binder/rl-entrypoint.sh /workspace/binder/autostart-garmi-rl.sh \
+      /home/jovyan/Desktop/GARMI_RL.desktop
 
-# Extra packages for the isaacsim python env (jupyter/ipywidgets for the
-# Isaac Sim jupyter kernel, tqdm for scripts)
-RUN $ISAACSIM_PYTHON_EXE -m pip install \
-        tqdm \
-        jupyter \
-        ipywidgets
-
-# Install UV (builds the giskard venv below)
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-#===========================================================#
-
-# VSCode extension to view the simulation desktop from code-server
-RUN curl -LO https://github.com/yxzhan/vscode_remote_desktop/releases/download/v0.1.0/vscode-remote-desktop-0.1.0.vsix && \
-    code-server --install-extension vscode-remote-desktop-0.1.0.vsix && \
-    rm vscode-remote-desktop-0.1.0.vsix && \
-    code-server --install-extension lichenxi.sysmonitor
-
-# Isaac Sim WebRTC streaming client: the desktop viewer for the stream a sim
-# started with ISAAC_LIVESTREAM=1 serves on port 49100 (see
-# demos/launcher.py start_streaming_client). apt-get resolves the .deb's own
-# dependencies, which dpkg -i would not.
-ENV ISAACSIM_STREAMING_CLIENT_VERSION="2.0.0"
-RUN cd /tmp && \
-    wget --no-check-certificate https://downloads.isaacsim.nvidia.com/isaacsim-webrtc-streaming-client-${ISAACSIM_STREAMING_CLIENT_VERSION}-linux-x86_64.deb && \
-    sudo apt-get update && \
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        /tmp/isaacsim-webrtc-streaming-client-${ISAACSIM_STREAMING_CLIENT_VERSION}-linux-x86_64.deb && \
-    sudo rm -rf /var/lib/apt/lists/* && \
-    rm /tmp/isaacsim-webrtc-streaming-client-${ISAACSIM_STREAMING_CLIENT_VERSION}-linux-x86_64.deb
-
-RUN cd /tmp && \
-    wget https://github.com/VirtualGL/virtualgl/releases/download/3.1.5/virtualgl_3.1.5_amd64.deb && \
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ./virtualgl_3.1.5_amd64.deb && \
-    rm ./virtualgl_3.1.5_amd64.deb
-
-RUN sudo apt-get update && \
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends git-lfs && \
-    git lfs install
-
-# Python packages for the jupyter env (rarely changes).
-USER ${NB_USER}
-COPY --chown=${NB_USER}:users binder/requirements.txt /tmp/requirements.txt
-RUN pip install -r /tmp/requirements.txt
-
-ENV REPO_DIR=${HOME}/cram-vrb-lab
-RUN mkdir -p ${REPO_DIR}
-
-#============= Pinned CRAM stack (deps + ROS workspace) =============#
-# The two builds below are expensive but depend only on the version-pinned
-# cognitive_robot_abstract_machine submodule, so they stay cached when only the
-# top-level demo scripts change (those are copied last, further down). The
-# submodule is copied ALONE here; the rest of the repo is copied afterwards.
-# NOTE: requires the repo to be cloned with --recurse-submodules so the
-# submodule is present in the build context.
-COPY --chown=${NB_USER}:users cognitive_robot_abstract_machine ${REPO_DIR}/cognitive_robot_abstract_machine
-
-# CRAM python environment (uv workspace -> .venv inside the submodule) plus the
-# two packages giskardpy's ROS2 middleware needs that are not in its lockfile.
-RUN cd ${REPO_DIR}/cognitive_robot_abstract_machine && \
-    ~/.local/bin/uv sync && \
-    .venv/bin/pip install nest_asyncio argcomplete usd-core && \
-    rm -rf ~/.cache/uv
-
-# Full CRAM ROS 2 workspace (overlay at ${REPO_DIR}/ros2_ws). The setup script
-# lives in the submodule and clones the code-iai / cram2 description and message
-# repos, colcon-building them with --merge-install. Notably it brings in:
-#   - iai_maps -> iai_apartment / iai_kitchen, whose meshes apartment.urdf needs
-#     (without them the apartment collision geometry cannot be resolved),
-#   - cram_ros2_packages, which provides json_msgs (JsonAction) used by giskard's
-#     action server and python client.
-# git-lfs is initialized before the clones so the mesh LFS objects are smudged in
-# (otherwise the mesh files are left as LFS pointer stubs). The host's ros2_ws is
-# excluded via .dockerignore and rebuilt fresh here, so there is no hand-made
-# json_msgs to collide with the one in cram_ros2_packages.
-RUN  OVERLAY_WS=${REPO_DIR}/ros2_ws \
-        bash ${REPO_DIR}/cognitive_robot_abstract_machine/.github/docker/setup_ros_workspace.sh && \
-    sudo rm -rf /var/lib/apt/lists/*
-
-#============= cramera (browser viewer for CRAM plans) =============#
-# The visualization front end of CRAM: replays a recorded coraplex run in the
-# browser and, with CORAPLEX_VISUALIZATION=cramera, streams the running one.
-#
-# Cloned here rather than copied from the host checkout (see .dockerignore), and
-# installed LAST on purpose: `uv sync` above prunes everything that is not in
-# uv.lock, so an editable cramera installed before it would be uninstalled again.
-#
-# `git -C cramera` for the submodule: the scenes (cram2/cram-scenes, ~650 MB of
-# recorded bundles) hang off the clone, not off the CRAM repo the RUN sits in.
-# The install goes into the CRAM venv -- the one the demos and the `cram` kernel
-# run on, and the only one that can import coraplex for the live bridge.
-RUN cd ${REPO_DIR}/cognitive_robot_abstract_machine && \
-    git clone --depth 1 https://github.com/yxzhan/cramera.git && \
-    git -C cramera submodule update --init && \
-    .venv/bin/pip install -e cramera
-#===================================================================#
-
-# Install jupyter kernel of the CRAM venv python. The wrapper sources the ROS 2
-# environment and the ros2_ws overlay, so notebooks on this kernel can import
-# rclpy/json_msgs without the jupyter server having sourced anything.
-# Install jupyter kernel of Isaac-sim python
-COPY --chown=${NB_USER}:users binder/isaacsim_python_wrapper.sh /home/jovyan/.local/bin/isaacsim_python_wrapper.sh
-COPY --chown=${NB_USER}:users binder/isaac-kernel.json /opt/conda/share/jupyter/kernels/isaac-sim/kernel.json
-COPY --chown=${NB_USER}:users binder/cram_python_wrapper.sh /home/jovyan/.local/bin/cram_python_wrapper.sh
-COPY --chown=${NB_USER}:users binder/cram-kernel.json /opt/conda/share/jupyter/kernels/cram/kernel.json
-
-# Pinned assets (Isaac USD scenes, stretch_urdf submodule) - rarely change, so they
-# get a layer of their own that survives every edit to the demos.
-COPY --chown=${NB_USER}:users assets/ ${REPO_DIR}/assets
-
-# The rest of the repo: what actually changes from build to build. The excludes are
-# what makes the layer above pay off -- without them this one would carry a second
-# copy of the assets (~900 MB) and of the submodule (~6 GB), and rewrite both
-# whenever any file in the repo changed. Both are already in the image by now, from
-# the COPY above and from the pinned-stack stage further up; perception_env is a
-# host-side venv that has no business in the image at all.
-COPY --chown=${NB_USER}:users \
-  --exclude=assets \
-  --exclude=cognitive_robot_abstract_machine \
-  --exclude=perception_env \
-  . ${REPO_DIR}
-
-RUN git config --global --add safe.directory ${REPO_DIR}
-
-# Set Jupyterlab default directory
-WORKDIR ${REPO_DIR}
-
-RUN mkdir -p /home/jovyan/Desktop/ && \
-    cp demos/desktop/*.desktop /home/jovyan/Desktop/ && \
-    chmod +x /home/jovyan/Desktop/*.desktop
-
-# XDG autostart: run demos/garmi_demo.py automatically when the desktop session
-# (display) comes up. The X server here is started on demand by
-# jupyter-remote-desktop-proxy -- whose xstartup is `exec dbus-launch
-# xfce4-session` -- so this fires the first time the user opens the "Desktop"
-# tab, which is the earliest moment a display exists for rviz and the sim.
-# Remove this file to disable auto-start; the double-clickable
-# Desktop/GARMI_apartment.desktop above stays either way.
-RUN chmod +x ${REPO_DIR}/binder/autostart-garmi.sh && \
-    mkdir -p ${HOME}/.config/autostart
-COPY --chown=${NB_USER}:users binder/GARMI-Apartment-autostart.desktop ${HOME}/.config/autostart/
-
-RUN code-server --install-extension mhutchie.git-graph
-
-# Set VSCODE default directory
-ENV CODE_WORKING_DIRECTORY=${REPO_DIR}
-#===================================================================#
-
-# The entrypoint of the docker image
-COPY --chown=${NB_USER}:users binder/entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+ENV CODE_WORKING_DIRECTORY=/workspace
+USER jovyan
+EXPOSE 8888
+ENTRYPOINT ["/workspace/binder/rl-entrypoint.sh"]
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser"]

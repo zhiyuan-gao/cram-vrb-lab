@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=GARMI RL
+Comment=Start or observe the current GARMI RL demo
+Exec=python3 -u /home/jovyan/cram-vrb-lab/demos/garmi_rl_demo.py
+Path=/workspace
+Terminal=true

@@ -235,14 +235,14 @@ def tool_frame_offset(side: str) -> str:
 MAX_FINGER_TRAVEL = 0.04
 """Per-finger stroke [m] from the URDF; the pads stand at most 0.08 m apart."""
 
-GRIPPER_OPEN_TRAVEL = 0.038
+GRIPPER_OPEN_TRAVEL = MAX_FINGER_TRAVEL
 """Per-finger travel [m] the sim opens the hand to when it parks.
 
-Just short of the :data:`MAX_FINGER_TRAVEL` hard stop, so the drive settles on
-the commanded value instead of pushing into the limit. Upstream's
-``GripperState.OPEN`` is the full 0.04; the difference only matters to the sim's
-park, since giskard commands the upstream value.
+Matches the upstream OPEN state and GraspGen's 80 mm aperture.
 """
+
+FINGER_VELOCITY_LIMIT = 0.01
+"""Finger speed [m/s]; limits the QP's near-stop discretization error."""
 
 FINGER_MASS = 0.0291
 """Mass [kg] of one FR3 finger link, from the description.
@@ -416,7 +416,7 @@ def _usd_safe_mesh(path: str) -> str:
 def load_patched_urdf() -> str:
     """Read the GARMI URDF and make it usable by the twin, giskard and the sim.
 
-    Five changes:
+    Changes:
 
     - the robot is renamed (:data:`ROBOT_NAME`), and the Gazebo and ros2_control
       blocks are dropped -- neither parser here has any use for them;
@@ -431,6 +431,8 @@ def load_patched_urdf() -> str:
       because their shoulders are mirrored;
     - the arms, grippers and head joints are renamed to what the upstream
       semantic model expects -- see :func:`_upstream_renames`.
+    - finger speed is limited to :data:`FINGER_VELOCITY_LIMIT` for precise
+      opening near the physical travel limit.
 
     Nothing is frozen: the wheels, the lift and the head are all real joints, and
     the upstream model claims all three.
@@ -446,6 +448,8 @@ def load_patched_urdf() -> str:
         for mimic in joint.findall("mimic"):
             joint.remove(mimic)
         name = joint.get("name", "")
+        if "finger_joint" in name:
+            joint.find("limit").set("velocity", str(FINGER_VELOCITY_LIMIT))
         if name in LIFT_JOINTS:
             limit = joint.find("limit")
             limit.set("upper", str(float(limit.get("upper")) + LIFT_LIMIT_MARGIN))

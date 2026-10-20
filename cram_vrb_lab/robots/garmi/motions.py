@@ -77,12 +77,25 @@ from semantic_digital_twin.spatial_types.spatial_types import (
 
 from semantic_digital_twin.robots.garmi import Garmi
 
-CLOSE_TIMEOUT = 3.0
+CLOSE_TIMEOUT = 10.0
 """Seconds to keep pushing the fingers shut before calling the hand closed.
 
-Comfortably longer than the 0.8 s an unobstructed close takes, so it only ever
-decides the *obstructed* case.
+Allows the full 40 mm stroke at the 5 mm/s reference speed and ends obstructed
+closures. Position targets remain latched to maintain the physical grasp.
 """
+
+GRIPPER_OPEN_TOLERANCE = 0.0002
+"""Per-finger OPEN completion tolerance in metres (0.2 mm).
+
+The generic joint task's 0.01 tolerance is ten millimetres for these prismatic
+joints, so it accepts the 38 mm parked position before reaching the 40 mm goal.
+"""
+
+GRIPPER_OPEN_GOAL_TOLERANCE = 0.00015
+"""QP completion tolerance [m], leaving 0.05 mm for settling after completion."""
+
+GRIPPER_REFERENCE_VELOCITY = 0.005
+"""Reference speed [m/s] for precise approach to either joint limit."""
 
 MOVE_TIMEOUT = 60.0
 """Seconds to keep driving at a navigation goal before calling the motion done.
@@ -192,11 +205,18 @@ class GarmiMoveGripper(MoveGripperMotion, AlternativeMotion[Garmi]):
         goal_state = end_effector.get_joint_state_by_type(self.motion)
 
         if self.motion != GripperState.CLOSE:
-            return JointPositionList(goal_state=goal_state, name="OpenGripper")
+            return JointPositionList(
+                goal_state=goal_state,
+                name="OpenGripper",
+                threshold=GRIPPER_OPEN_GOAL_TOLERANCE,
+                max_velocity=GRIPPER_REFERENCE_VELOCITY,
+            )
 
         return Parallel(
             [
-                JointPositionList(goal_state=goal_state, name="CloseGripper"),
+                JointPositionList(goal_state=goal_state, name="CloseGripper",
+                                  threshold=GRIPPER_OPEN_GOAL_TOLERANCE,
+                                  max_velocity=GRIPPER_REFERENCE_VELOCITY),
                 CountSeconds(seconds=CLOSE_TIMEOUT, name="CloseGripperTimeout"),
             ],
             minimum_success=1,

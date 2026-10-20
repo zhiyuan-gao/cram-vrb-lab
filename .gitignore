@@ -25,3 +25,11 @@ vrb_lab_page.md
 # Written at container start-up by binder/entrypoint.sh
 demos/web_ui/version.json
 **.log
+
+# Generated RL demo data, extracted during the container build.
+results/
+rl/assets/
+third_party/IsaacLab/
+.pytest_cache/
+.env
+.env.*

@@ -19,3 +19,15 @@ ros2_ws
 .idea
 .vscode
 
+# Installed from the pinned upstream image, not rebuilt from host checkouts.
+.git
+**/.git
+assets
+cognitive_robot_abstract_machine
+results
+rl/assets
+third_party/IsaacLab
+**/*.ipynb
+**/*.mp4
+tmp
+
