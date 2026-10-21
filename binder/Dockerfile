@@ -231,6 +231,17 @@ RUN cd ${REPO_DIR}/cognitive_robot_abstract_machine/cramera && \
     cd ../ && \
     .venv/bin/pip install -e cramera
 
+# Bundle the GARMI RL replay beside the existing GARMI scenes at build time.
+# The existing Workspace provides NeemHub's native task selector.
+RUN tar -xzf ${REPO_DIR}/demos/neemhub/garmi_rl_pick_up.tar.gz \
+        -C ${REPO_DIR}/cognitive_robot_abstract_machine/cramera/scenes && \
+    test -s ${REPO_DIR}/cognitive_robot_abstract_machine/cramera/scenes/garmi_rl_pick_up/scene.json && \
+    test -s ${REPO_DIR}/cognitive_robot_abstract_machine/cramera/scenes/garmi_rl_pick_up/trajectory.json
+
+# Install the live GARMI RL demo beside the original GARMI demo at build time.
+# This includes the policy, isolated Isaac Lab runtime and normal desktop entry.
+RUN bash ${REPO_DIR}/binder/install_garmi_rl.sh
+
 # Set VSCODE default directory
 ENV CODE_WORKING_DIRECTORY=${REPO_DIR}
 #===================================================================#
