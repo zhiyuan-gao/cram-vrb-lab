@@ -1,21 +1,13 @@
-
-# Python build artifacts / virtualenvs. The image builds its own CRAM .venv via
-# `uv sync`; copying the host one would drag in host-specific paths.
-**/.venv
-**/__pycache__
-**/*.pyc
-**/*.egg-info
-**/.pytest_cache
-**/.mypy_cache
-**/.ruff_cache
-
-# The ROS 2 workspace is built inside the image by setup_ros_workspace.sh, not
-# copied from the host. The host copy also carries a hand-made json_msgs that
-# would duplicate the one in cram_ros2_packages.
-ros2_ws
-
-# Editor / agent state.
-.claude
-.idea
-.vscode
-
+# Original GARMI assets and environments come from the pinned base image.
+**
+!binder/
+!binder/Dockerfile
+!binder/install_garmi_rl.py
+!binder/install_garmi_rl.sh
+!demos/
+!demos/garmi_rl/
+!demos/garmi_rl/**
+!demos/neemhub/
+!demos/neemhub/**
+!demos/web_ui/
+!demos/web_ui/index.html

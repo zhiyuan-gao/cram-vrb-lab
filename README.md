@@ -1,6 +1,6 @@
 # cram-vrb-lab
 
-[![Binder](https://binder.intel4coro.de/badge_logo.svg)](https://binder.dev.intel4coro.de/v2/gh/yxzhan/cram-vrb-lab/main?urlpath=lab%2Ftree%2Fdemos%2Fpanda_aicor_apartment.ipynb)
+[![Binder](https://binder.intel4coro.de/badge_logo.svg)](https://binder.dev.intel4coro.de/v2/gh/zhiyuan-gao/cram-vrb-lab/garmi-rl-native-demo?urlpath=files%2Fdemos%2Fweb_ui%2Findex.html)
 
 A virtual research lab for running
 [CRAM](https://github.com/cram2/cognitive_robot_abstract_machine)
@@ -21,6 +21,19 @@ https://github.com/user-attachments/assets/1f4c0351-c351-4915-a0ed-53b5dfe351a0
 
 
 
+
+## GARMI RL desktop build
+
+This branch adds **GARMI RL Counter to Table** beside original GARMI in the Lab
+image. Open the Binder link above, select **NeemHub + Desktop**, stop the original
+autostarted GARMI demo, and double-click the RL desktop icon. It runs 10 episodes
+with scene resets in one Isaac Sim process. The bowl starts on the left counter.
+
+The pinned original Isaac Sim 6.1 image, bundled policy, isolated RL environment,
+camera fixes, desktop entry and NeemHub replay are installed at build time. No
+`/mnt/dev-tools` mount or startup recovery is required. See
+[demos/garmi_rl/README.md](demos/garmi_rl/README.md) for the included snapshot.
+Existing instances and launches of other branches retain their previous images.
 
 ## Quick start
 
