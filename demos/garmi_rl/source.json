@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/zhiyuan-gao/garmi-mobile-grasp-rl",
+  "commit": "d4e5aea9dc23aa44de30aa403266bdc0aa0ef6bf",
+  "source_map": "deployment/isaac61/source-map.json",
+  "source_map_sha256": "c5dbe62a3bd7b6c4f3854474b4bbda5b15e85c55bd464b4e594e45d803eec882",
+  "archive_sha256": "818fdcff7e1d1f9be0fda60f42292ed0bca14bb226f8d3cc434cc1d430464590",
+  "files_manifest_sha256": "a65397c4feb8177fd456d2890716c2a37bbef22023c8c8d757dab16a17e253ba",
+  "file_count": 146,
+  "environment": "Isaac Sim 6.1 / Isaac Lab 2.3.2 compatibility runtime",
+  "content_baseline": {
+    "repository": "https://github.com/zhiyuan-gao/cram-vrb-lab",
+    "commit": "9b7d8f3b21b350ca1dba986e57e377f416ee4935",
+    "archive": "demos/garmi_rl/runtime.tar.gz",
+    "archive_sha256": "818fdcff7e1d1f9be0fda60f42292ed0bca14bb226f8d3cc434cc1d430464590"
+  },
+  "task": "bowl_counter_to_table"
+}

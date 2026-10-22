@@ -7,12 +7,29 @@ import shutil
 import tarfile
 
 
+def verify_source(payload):
+    source = json.loads((payload / 'source.json').read_text())
+    if source['repository'] != 'https://github.com/zhiyuan-gao/garmi-mobile-grasp-rl':
+        raise ValueError('Unexpected RL source repository')
+    commit = source['commit']
+    if len(commit) != 40 or any(c not in '0123456789abcdef' for c in commit):
+        raise ValueError('RL source must pin a full commit')
+    for name, key in [('runtime.tar.gz', 'archive_sha256'),
+                      ('files.sha256.json', 'files_manifest_sha256')]:
+        if hashlib.sha256((payload / name).read_bytes()).hexdigest() != source[key]:
+            raise ValueError(f'RL source artifact mismatch: {name}')
+    return source
+
+
 def install(lab, desktop_home):
     root = lab / 'garmi-mobile-grasp-rl'
     if root.exists():
         raise FileExistsError(f'Refusing to overwrite an existing RL installation: {root}')
     payload = lab / 'demos/garmi_rl'
+    source = verify_source(payload)
     expected = json.loads((payload / 'files.sha256.json').read_text())
+    if len(expected) != source['file_count']:
+        raise ValueError('RL source file count mismatch')
     with tarfile.open(payload / 'runtime.tar.gz', 'r:gz') as archive:
         members = archive.getmembers()
         if len(members) != len(expected) or {m.name for m in members} != set(expected):

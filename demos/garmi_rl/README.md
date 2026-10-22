@@ -4,9 +4,9 @@
 inference policy, frozen reference data, source code, Isaac Sim 6.1 compatibility
 patch, pinned Python requirements and an English desktop launcher. The source
 project is <https://github.com/zhiyuan-gao/garmi-mobile-grasp-rl>, with the desktop,
-scene reset, live viewer and camera fixes developed in the current workspace.
-`files.sha256.json` identifies every file in this snapshot, including changes not
-yet published in that upstream project.
+scene reset, live viewer and camera fixes maintained in its `deployment/isaac61/`
+directory. `source.json` pins the source commit and artifact hashes;
+`files.sha256.json` identifies every file in this snapshot.
 
 `binder/install_garmi_rl.sh` installs it during the image build into
 `/home/jovyan/cram-vrb-lab/garmi-mobile-grasp-rl`, with `/workspace` as the frozen
@@ -25,4 +25,5 @@ is installed separately from `demos/neemhub/garmi_rl_pick_up.tar.gz`.
 
 Licenses and asset provenance are retained inside the archive in `LICENSE`,
 `THIRD_PARTY_NOTICES.md` and `runtime/data-manifest.json`. Regenerate this archive
-with the source project's `scripts/package_native_demo.py` when updating it.
+from a committed source checkout with `python3 scripts/build_native_runtime.py build
+--out /path/to/new-package`, then copy the three generated files into this directory.
