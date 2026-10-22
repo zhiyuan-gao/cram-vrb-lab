@@ -13,7 +13,9 @@ test "$(readlink -f /workspace)" = "$demo_dir"
 cd "$demo_dir"
 /opt/conda/bin/python runtime/unpack.py
 export PATH="/home/jovyan/.local/bin:$PATH"
-bash scripts/setup_isaac61.sh
+# Apply the bundled setuptools constraint to every isolated source build,
+# including flatdict in the initial requirements installation.
+UV_BUILD_CONSTRAINT="$demo_dir/rl/build-constraints.txt" bash scripts/setup_isaac61.sh
 "$lab_dir/cognitive_robot_abstract_machine/.venv/bin/python" integration/prepare_full_scene.py
 # Validate the frozen bundle and camera math without starting GPU simulation.
 PYTHONPATH="$demo_dir/integration:$demo_dir/rl" .venv61/bin/python -c \
