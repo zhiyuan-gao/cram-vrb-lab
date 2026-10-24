@@ -1,5 +1,12 @@
 # GARMI RL runtime bundled with CRAM Lab
 
+The current image runs the continuous bowl-and-mug household task. Its entry is
+in NeemHub's existing Task selector, replacing `garmi rl pick up`; no outer task
+toolbar is added. `demos/household_workspace/source.json` records the UI integration
+source and `demos/household_workspace/files.sha256.json` verifies the final installed
+runtime. The archive and descriptions below record the base runtime retained for
+the cached installation layer.
+
 `runtime.tar.gz` is the live counter-to-table demo snapshot. It includes the PPO
 inference policy, frozen reference data, source code, Isaac Sim 6.1 compatibility
 patch, pinned Python requirements and an English desktop launcher. The source

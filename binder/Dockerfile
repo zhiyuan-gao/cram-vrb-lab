@@ -13,5 +13,9 @@ RUN tar -xzf ${REPO_DIR}/demos/neemhub/garmi_rl_pick_up.tar.gz \
     test -s ${REPO_DIR}/cognitive_robot_abstract_machine/cramera/scenes/garmi_rl_pick_up/trajectory.json && \
     bash ${REPO_DIR}/binder/install_garmi_rl.sh
 
+# Apply the verified Workspace-only update after the cached simulation runtime.
+COPY --chown=jovyan:users demos/household_workspace/ ${REPO_DIR}/demos/household_workspace/
+RUN /opt/conda/bin/python ${REPO_DIR}/demos/household_workspace/install.py --lab ${REPO_DIR}
+
 WORKDIR ${REPO_DIR}
 # Preserve the original image's Jupyter/desktop entrypoint and default command.
