@@ -177,7 +177,7 @@
   "demos/household_sequence/protocol.py": "1d00c29f628851da3da48465e953d0f759318dfebdc44f213791b2fcfad53e31",
   "demos/mug_drawer/kinematics.py": "20dc37929b128222f36df3cfdd9df85e37c6d323d96d9ecc71c46946ffec7a0e",
   "demos/household_sequence/unpack_assets.py": "925057e3263b7f85c079eed742b44c9661643ea32348a426e3d9af5039b3a9bd",
-  "demos/household_sequence/server.py": "268fccfc5bfbf2bd1d89ad960a9e7cd16c0458ace00f168e39763dfb28ddadec",
+  "demos/household_sequence/server.py": "f442e35dd731c30cd4153edb6a7ad7d74e3c64c665b44764e02dfc3de113e1f1",
   "demos/household_sequence/live_task.py": "554f35fbf498832870d778766f7ea19c29c07cb9e0f432c88a515bcd08d58db7",
   "demos/household_sequence/sim.py": "8b5d590951125e03e27dcf25dfce1145dc9a2f29aa6325720b22c9465b699899",
   "demos/household_sequence/start_service.py": "af31d20179e9468d70bf8c26aa014b86b5e993653af50b103a9c98982c84c65e",

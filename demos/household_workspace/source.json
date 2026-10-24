@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/zhiyuan-gao/garmi-mobile-grasp-rl",
-  "commit": "85b202f6cc8f54ca5977dbc674d0a1ed4966e6a9",
+  "commit": "f05a57b7b20ca52f34d339b25ec32b9473cdb9fe",
   "base_runtime_commit": "30c1cb568da3b6f836c0f9c10a4e7fe131e0fbcd",
-  "source_map_sha256": "8641d51cdfcebb4bd71f439c8e5bd21cb89ef1e07f8e28160060cbb6dd45add9",
-  "rebuilt_runtime_archive_sha256": "999760af05568e6aac65dafbe161d2e6b206ba9e5e8d62b2fe936028e4732adc",
+  "source_map_sha256": "fd55fb3214935228b66a5a0e47751b47209c49ea8775417c53fa334b4971dc16",
+  "rebuilt_runtime_archive_sha256": "94f56d446d1b952eb8371379e9c863963fe5e9a0d9ddfdf9729dc14c0caa98a4",
   "files": {
     "scripts/install_live_workspace.py": {
       "before_sha256": "900e60de129e7a0ad03ac58032a5cd01d8003c70ba11b0c82b7eb2531c368d19",
@@ -11,7 +11,7 @@
     },
     "demos/household_sequence/server.py": {
       "before_sha256": "878cb3bcb6ea3a374170928f2871717d0f499f1cc91fc6ad31e6ef853b659ed9",
-      "sha256": "268fccfc5bfbf2bd1d89ad960a9e7cd16c0458ace00f168e39763dfb28ddadec"
+      "sha256": "f442e35dd731c30cd4153edb6a7ad7d74e3c64c665b44764e02dfc3de113e1f1"
     },
     "demos/household_sequence/README.md": {
       "before_sha256": "7f98119eb68aa2600a03fad9e6537a3c4ec5f2fbd31a46393a687ca14f52c9e8",
