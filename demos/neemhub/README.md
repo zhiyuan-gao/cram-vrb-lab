@@ -1,14 +1,5 @@
 # GARMI RL recording
 
-The current household Workspace replaces this recording's `garmi rl pick up`
-entry in Semantic Digital Twin Scene's **Task** selector with **Bowl and Mug**.
-That entry connects to the real long task; Start and Stop appear in the scene's
-playback area. There is no extra Workspace task toolbar. Other recorded tasks
-remain available. The archive below is retained as part of the cached base image;
-see `demos/household_workspace` for the versioned integration layer.
-
-## Base recording provenance
-
 `garmi_rl_pick_up.tar.gz` contains the self-contained NeemHub recording of the
 successful CRAM navigation → RL grasp → CRAM transport and placement run
 `20261020-164101-49d9`. It includes 1327 trajectory frames, the robot and apartment
