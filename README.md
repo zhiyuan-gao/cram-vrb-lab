@@ -4,8 +4,16 @@ This repository packages the GARMI desktop workspace for the Virtual Research Bu
 The active deployment branch is **`garmi-rl-native-demo`**.
 
 The Lab combines the original CRAM workspace, remote desktop and NeemHub viewer
-with a learned bowl-grasping controller and CRAM transport to the dining table.
-The **GARMI RL Counter to Table** desktop entry runs ten episodes with scene reset.
+with one continuous household task. The bowl and mug start on the left kitchen
+counter. GARMI delivers the bowl to the dining table, returns for the mug, opens
+the upper drawer with its left hand, places the mug inside with its right hand,
+and closes the drawer. The task runs once when the desktop session starts.
+The left NeemHub pane follows the measured robot, object and drawer states;
+the right desktop displays the running Isaac Sim scene.
+
+The demo selector retains the original GARMI and standalone bowl demos.
+The **GARMI RL Counter to Table** desktop entry also retains its ten episodes
+with scene reset.
 
 [Open the Lab](https://binder.intel4coro.de/v2/gh/zhiyuan-gao/cram-vrb-lab/garmi-rl-native-demo?urlpath=files%2Fdemos%2Fweb_ui%2Findex.html)
 · [Task and training source](https://github.com/zhiyuan-gao/garmi-mobile-grasp-rl)

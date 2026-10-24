@@ -22,3 +22,9 @@ PYTHONPATH="$demo_dir/integration:$demo_dir/rl" .venv61/bin/python -c \
   'from pathlib import Path; from garmi_cram_rl.contract import Bundle; Bundle(Path("results/cram-rl-integration/policy-7500"), Path.cwd()); print("Frozen RL bundle validated.")'
 test -s integration/assets/apartment.usda
 test -x /home/jovyan/Desktop/GARMI_RL_pick_up.desktop
+# Install the single continuous task alongside the existing bowl demo.
+/opt/conda/bin/python demos/household_sequence/fetch_assets.py
+/opt/conda/bin/python scripts/install_live_workspace.py \
+  --workspace "$lab_dir" --desktop-home /home/jovyan
+/opt/conda/bin/python demos/household_sequence/install.py \
+  --lab "$lab_dir" --home /home/jovyan
