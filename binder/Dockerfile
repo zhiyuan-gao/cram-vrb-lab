@@ -17,5 +17,9 @@ RUN tar -xzf ${REPO_DIR}/demos/neemhub/garmi_rl_pick_up.tar.gz \
 COPY --chown=jovyan:users demos/household_workspace/ ${REPO_DIR}/demos/household_workspace/
 RUN /opt/conda/bin/python ${REPO_DIR}/demos/household_workspace/install.py --lab ${REPO_DIR}
 
+# Perception-guided household task, native reasoning views and measured runtime optimizations.
+COPY --chown=jovyan:users demos/robokudo_household_release/ ${REPO_DIR}/demos/robokudo_household_release/
+RUN /opt/conda/bin/python ${REPO_DIR}/demos/robokudo_household_release/install.py --lab ${REPO_DIR}
+
 WORKDIR ${REPO_DIR}
 # Preserve the original image's Jupyter/desktop entrypoint and default command.

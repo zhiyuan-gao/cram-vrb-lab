@@ -11,3 +11,7 @@
 !demos/neemhub/**
 !demos/web_ui/
 !demos/web_ui/index.html
+!demos/household_workspace/
+!demos/household_workspace/**
+!demos/robokudo_household_release/
+!demos/robokudo_household_release/**
