@@ -1,59 +1,52 @@
 # GARMI RL Lab deployment
 
-This repository packages the GARMI desktop workspace for the Virtual Research Building.
-The active deployment branch is **`garmi-rl-native-demo`**.
+This repository packages the interactive GARMI household demo for the
+[VLA and RL Lab](https://vrb.ease-crc.org/explore-labs/vla-lab/) in the Virtual Research Building.
+The active release branch is `codex/robokudo-household-release-20261110`.
 
-The Lab combines the original CRAM workspace, remote desktop and NeemHub viewer
-with one continuous household task. The bowl and mug start on the left kitchen
-counter. GARMI delivers the bowl to the dining table, returns for the mug, opens
-the upper drawer with its left hand, places the mug inside with its right hand,
-and closes the drawer. The task runs once when the desktop session starts.
-The left NeemHub pane follows the measured robot, object and drawer states;
-the right desktop displays the running Isaac Sim scene.
+The bowl and mug start on the kitchen counter. RoboKudo localizes the objects,
+CRAM selects the bowl approach station, and `RLPickUpAction` runs the trained
+whole-body grasp policy. GARMI carries the bowl to the dining table, returns for
+the mug, captures a fresh perception result, grasps it, and places it in a drawer
+before closing the drawer. **Start task** runs this continuous sequence once.
 
-The demo selector retains the original GARMI and standalone bowl demos.
-The **GARMI RL Counter to Table** desktop entry also retains its ten episodes
-with scene reset.
+The left pane shows the live NeemHub world and task progress; the right pane shows
+Isaac Sim on the remote desktop. The NeemHub arrow opens Knowledge, Plan,
+Statechart, Kinematics and Transforms. **RoboKudo ↗** shows the RGB-D observations,
+object point clouds and pose estimates used during the task.
 
-[Open the Lab](https://binder.intel4coro.de/v2/gh/zhiyuan-gao/cram-vrb-lab/garmi-rl-native-demo?urlpath=files%2Fdemos%2Fweb_ui%2Findex.html)
-· [Task and training source](https://github.com/zhiyuan-gao/garmi-mobile-grasp-rl)
-· [Runtime provenance](demos/garmi_rl/source.json)
+[Open the Lab](https://binder.dev.intel4coro.de/v2/gh/zhiyuan-gao/cram-vrb-lab/codex%2Frobokudo-household-release-20261110?urlpath=files%2Fdemos%2Fweb_ui%2Findex.html)
+· [Task and training source](https://github.com/zhiyuan-gao/garmi-mobile-grasp-rl/tree/codex/robokudo-household-release-20261110)
+· [Runtime provenance](demos/robokudo_household_release/source.json)
+
+## Current release
+
+The runtime uses the FR3 nominal arm velocity bounds through project-level CRAM
+and Giskard overrides. Navigation keeps the validated base limits. The full
+local task passed with the bowl on the table and the mug inside the closed drawer.
+See [the release guide](demos/robokudo_household_release/README.md).
 
 ## Repository roles
 
-- **[garmi-mobile-grasp-rl](https://github.com/zhiyuan-gao/garmi-mobile-grasp-rl):** training, evaluation, bowl and mug drawer tasks, and the versioned native runtime sources.
-- **This repository:** Binder image, build-time installation, desktop integration, workspace page, and a package pinned to an RL source commit.
-
-The mug-to-drawer task is available in the source repository under
-[`demos/mug_drawer/`](https://github.com/zhiyuan-gao/garmi-mobile-grasp-rl/tree/main/demos/mug_drawer).
-Its guide describes the Isaac Sim 5.1 launcher and the published mug policy.
-The native Lab package uses the Isaac Sim 6.1 environment supplied by the pinned
-GARMI base image.
+- **garmi-mobile-grasp-rl:** training, evaluation, checkpoints, task implementations and native runtime sources.
+- **cram-vrb-lab:** Binder image, desktop integration, interactive page and a runtime package pinned to a source commit.
 
 ## Update the runtime
 
-In a committed checkout of the RL source repository:
+From a committed checkout of the source repository:
 
 ```bash
 python3 scripts/build_native_runtime.py verify
 python3 scripts/build_native_runtime.py build --out /path/to/new-runtime-package
 ```
 
-Copy `runtime.tar.gz`, `files.sha256.json`, and `source.json` from that output into
-`demos/garmi_rl/` here. The image installer verifies the archive hash, file manifest,
-and every extracted file. `source.json` records the exact source commit.
-See [the deployment package guide](demos/garmi_rl/README.md).
+Copy `runtime.tar.gz`, `files.sha256.json`, and `source.json` into
+`demos/robokudo_household_release/`. Binder builds `binder/Dockerfile`; the installer
+verifies the package and its files. Open `files/demos/web_ui/index.html` in the
+authenticated Jupyter session, then select **Start task**.
 
-Binder builds `binder/Dockerfile`; the workspace opens at
-`files/demos/web_ui/index.html`. Use `binder.intel4coro.de` and
-`jupyter.intel4coro.de` for production. The `.dev` Binder endpoint is inaccessible
-in this workflow. After validating a deployment, a fixed commit URL can be set
-as the VRB introduction page's Enter Lab link through its separate CMS.
-
-## Branches
-
-`garmi-rl-native-demo` is the deployment branch. `garmi-rl-demo` retains the earlier
-RL workspace implementation. `main`, `garmi`, `dev`, and `isaac6` preserve upstream
-versions. Historical release tags provide fixed references for earlier deployments.
+The GPU deployment uses `binder.dev.intel4coro.de`. The VRB Enter Lab button pins a
+specific validated deployment commit. The original GARMI and other task entries
+remain available in the demo selector.
 
 [Original project documentation](README_UPSTREAM.md)

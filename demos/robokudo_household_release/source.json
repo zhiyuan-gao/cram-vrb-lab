@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/zhiyuan-gao/garmi-mobile-grasp-rl",
-  "commit": "f66773e229997c059cd6a7560af1606860de7f98",
+  "commit": "3533d563a22ee9d3e2a56c5cf02123a03168924b",
   "source_map": "deployment/isaac61/source-map.json",
-  "source_map_sha256": "203f104facf41174ce438b324b60162ddab7fbff300f33f55b5ed478bd6caf3a",
-  "archive_sha256": "11e0ab1ac422d1f60b7c0c01c538da2d3506ded799211250a84afb62f0d50723",
-  "files_manifest_sha256": "996a2e3134b6e06e5d19b9b052b3b318b86d80699ccb1e67e282569219f62b1b",
-  "file_count": 259,
+  "source_map_sha256": "bdd58585f8022d32c1d03a14d005e8b7af32cbd8043905ca03b2d8f808b1a07d",
+  "archive_sha256": "849edf0a636f1d65f62cc472400b8b5917e948d8bf26075197ddd50c89f8db0f",
+  "files_manifest_sha256": "421d079c9c9dc8645d58c00f28270fcb0c9748c7cae291916a008f570b1ec41d",
+  "file_count": 260,
   "environment": "Isaac Sim 6.1 / Isaac Lab 2.3.2 compatibility runtime",
   "content_baseline": {
     "repository": "https://github.com/zhiyuan-gao/cram-vrb-lab",

@@ -5,7 +5,7 @@
   "cram-vrb-lab/assets/garmi-apartment/world.usda": "55891e640c93cf6794c5a0b90e7d2e1f4bf1d8e371cb27570fa7007e878de699",
   "integration/GARMI_RL_pick_up.desktop": "7ace6f181b83be694491d80f457281a4a1779f08f6331fac41a8a37dbedc7875",
   "integration/check_idle.py": "91ebdbc60ccf23dcfc15610b0d5101e6a3ca4634582144463fb41e49b4bc2843",
-  "integration/cram_demo.py": "717d8157d6b246575b4e2d470df8050635bd5f8bea9e896b2cfb5225968a0426",
+  "integration/cram_demo.py": "4982fbe72cc8d318481bf9b69b60817f871be0b00e9e33bed675c31908e41678",
   "integration/fastdds.xml": "fbdf510c88b1bc89066b5a3159351d10744bcaecfc069ba866cf6d7cd0b3c200",
   "integration/garmi-desktop.kit": "b58296b0090fa105b4db38a30e88ebb90ef0e955b270811b73b1e9c58b10f8b5",
   "integration/garmi_cram_rl/__init__.py": "aaf1f8382d5aee80a983d658d1e0da5842d528cd0cd5740d04abf3909b0735ba",
@@ -18,7 +18,7 @@
   "integration/garmi_cram_rl/ros_bridge.py": "72620e72343b7e6ac57d7c1d7626aed51a645668253c3744d04014e64f2123a7",
   "integration/garmi_cram_rl/session.py": "9ee20d1fa57b08334f3a26a885fa20c7ce49d1a9cec949d3fe2d210f3b91279a",
   "integration/garmi_cram_rl/viewport.py": "dd302290ca4b47ab1c69156f0bbc8707cdd87db445a0aa3177931fa6a7dcd888",
-  "integration/giskard_server.py": "b9a005d4414d2aad2e0d3a40a9bfcc101e9efa5fa1a4593b4b905e1f18e4efe1",
+  "integration/giskard_server.py": "2c9f5653ddda0fee856f58b64143c9fa12e6e72e07cd707090e520c28b9fb3e6",
   "integration/left_counter_episodes.json": "f969297dcb9f7ec228f46cc6fc961ee4bb29008c8014527e5b7c5f0178b97b8b",
   "integration/make_episode_report.py": "c83908bb73bb4d84ad9d1cd69ee57260fa425fd82f5760409abd248d21699f1c",
   "integration/motion_watchdog.py": "64837250db3c4be5a1ef30ef1e3b1ed30222ecdfc36440a7b598b201b7b0ba98",
@@ -249,7 +249,7 @@
   "demos/robokudo_household/plan.py": "a1fee3e27cb010fb4139b0934d672eca6fdafc11ee2a7761b6d39ba805f29838",
   "demos/robokudo_household/explorer.js": "39ac9e2191b53c42904bc7148b7ece94cf96217ac00a7fbeaf46e2fdf1f3657a",
   "demos/robokudo_household/neemhub.py": "50ff442abb89b7d9b18156d240261f56deafb5abeae4d939c78470650ddb03f3",
-  "demos/robokudo_household/README.md": "f81babbceda5ea3db32761767b28a39ad6a283bf9bf2ee00f6ddd29bf9287846",
+  "demos/robokudo_household/README.md": "25a9e87e18eeb9fc0726de97fe11559bc071c2598fa0054d2171c8621d33efbc",
   "demos/robokudo_household/validate_run.py": "fa427e3b34238326e321c14a8894c7edd10397b926bcc869e909e7e9bfd24a31",
   "demos/robokudo_household/validation.json": "c59b7e83aac6d2b6d220712a10741e9e7fae7cd1e4769152826c2a538277ffd8",
   "demos/robokudo_household/performance.py": "967be65c6e28b6a6d314e2874d02b42fe1e57198e3ca0a6c9d63fef8ffae3642",
@@ -257,5 +257,6 @@
   "demos/robokudo_household/connect_viewer.py": "f7503edba8efe53a25770d967502f7846876c0fe6fa6376054c7aa4054a889f6",
   "demos/robokudo_household/PERFORMANCE.md": "78db6a285a012aab12066fa637c0a47a4d2db588c603856cc61ff9898d2edc8c",
   "demos/robokudo_household/performance-validation/benchmark.json": "420c07ad6c646091a94ecb62e81def63da728cb4b1d938fa3d0a6b8d3fe7b6a1",
-  "demos/robokudo_household/performance-validation/household-run.json": "f6bbfddd6102fc89ba9a1c15fda10b48308f7c121f4b5756e50be18c49b440e6"
+  "demos/robokudo_household/performance-validation/household-run.json": "f6bbfddd6102fc89ba9a1c15fda10b48308f7c121f4b5756e50be18c49b440e6",
+  "integration/garmi_cram_rl/fr3_limits.py": "d9d32951ea116a0c145ceeb7ba476fe1d7292b15847cf0bb8401a1dcc4f7a674"
 }
